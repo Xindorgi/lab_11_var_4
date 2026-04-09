@@ -1,10 +1,23 @@
 import signal
 import uvicorn
+import os
+import httpx
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
+
+
+@app.get("/check-go")
+async def check_go():
+    go_url = os.getenv("GO_APP_URL", "http://go-app:8080/time")
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(go_url)
+            return {"status": "ok", "go_response": response.json()}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
 
 
 @app.get("/ping")

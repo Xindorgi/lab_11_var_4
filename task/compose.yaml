@@ -3,12 +3,26 @@ services:
     build:
       context: ./go-app
       dockerfile: Dockerfile
+    container_name: go-app
     ports:
       - "8080:8080"
+    networks:
+      - app-net
 
   python-app:
     build:
       context: ./python-app
       dockerfile: Dockerfile
+    container_name: python-app
     ports:
       - "8000:8000"
+    networks:
+      - app-net
+    depends_on:
+      - go-app
+    environment:
+      - GO_APP_URL=http://go-app:8080/time
+
+networks:
+  app-net:
+    driver: bridge
