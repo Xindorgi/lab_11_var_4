@@ -14,6 +14,7 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+    stop_grace_period: 10s
 
   python-app:
     build:
@@ -35,6 +36,7 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+    stop_grace_period: 10s
 
 networks:
   app-net:

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -52,6 +52,7 @@ func runServer(srv *http.Server) error {
 
 	errCh := make(chan error, 1)
 	go func() {
+		log.Printf("Server starting on %s", srv.Addr)
 		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 			errCh <- err
 		}
@@ -60,10 +61,17 @@ func runServer(srv *http.Server) error {
 	select {
 	case err := <-errCh:
 		return err
-	case <-quit:
+	case sig := <-quit:
+		log.Printf("Received signal: %v, initiating graceful shutdown...", sig)
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		return srv.Shutdown(ctx)
+
+		if err := srv.Shutdown(ctx); err != nil {
+			log.Printf("Server forced to shutdown: %v", err)
+			return err
+		}
+		log.Println("Server gracefully stopped")
+		return nil
 	}
 }
 
@@ -77,7 +85,7 @@ func main() {
 
 	srv := newServer()
 	if err := runServer(srv); err != nil {
-		fmt.Fprintf(os.Stderr, "server error: %v\n", err)
+		log.Printf("server error: %v", err)
 		os.Exit(1)
 	}
 }
