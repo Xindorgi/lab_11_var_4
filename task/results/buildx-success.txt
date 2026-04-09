@@ -1,0 +1,26 @@
+=== Multi-arch сборка успешно выполнена ===
+Собраны образы под разные архитектуры:
+python-app          multi-arch-arm64   44.4MB
+go-app              multi-arch-arm64   2.2MB
+python-app          multi-arch-amd64   184MB
+go-app              multi-arch-amd64   7.82MB
+
+Команды сборки:
+
+Go (AMD64):
+docker buildx build --platform linux/amd64 -t go-app:amd64 -f Dockerfile --load .
+
+Go (ARM64):
+docker buildx build --platform linux/arm64 -t go-app:arm64 -f Dockerfile --load .
+
+Python (AMD64):
+docker buildx build --platform linux/amd64 -t python-app:amd64 -f Dockerfile --load .
+
+Python (ARM64):
+docker buildx build --platform linux/arm64 -t python-app:arm64 -f Dockerfile --load .
+
+Для создания единого multi-arch манифеста:
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/app:multi-arch --push .
+
+Вывод: Dockerfile корректно используют ARG TARGETOS и TARGETARCH,
+кросс-платформенная сборка работает.
