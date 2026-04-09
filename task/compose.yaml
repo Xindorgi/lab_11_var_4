@@ -8,6 +8,12 @@ services:
       - "8080:8080"
     networks:
       - app-net
+    healthcheck:
+      test: ["CMD", "/app", "-health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
 
   python-app:
     build:
@@ -19,9 +25,16 @@ services:
     networks:
       - app-net
     depends_on:
-      - go-app
+      go-app:
+        condition: service_healthy
     environment:
       - GO_APP_URL=http://go-app:8080/time
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
 networks:
   app-net:
