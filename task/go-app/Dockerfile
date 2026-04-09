@@ -1,0 +1,10 @@
+FROM golang:1.22-alpine AS builder
+WORKDIR /src
+COPY go.mod .
+COPY main.go .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /app .
+
+FROM scratch
+COPY --from=builder /app /app
+EXPOSE 8080
+ENTRYPOINT ["/app"]

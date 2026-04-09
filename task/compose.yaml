@@ -1,0 +1,14 @@
+services:
+  go-app:
+    build:
+      context: ./go-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  python-app:
+    build:
+      context: ./python-app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
