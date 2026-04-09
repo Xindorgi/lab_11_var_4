@@ -6,17 +6,18 @@
 
 ```text
 ./
-├── compose.yaml               # Оркестрация контейнеров
-├── go-app/
-│   ├── main.go                # HTTP-сервер на Go (порт 8080)
-│   ├── main_test.go           # Юнит-тесты Go
-│   ├── go.mod
-│   └── Dockerfile             # Многоэтапная сборка, финальный образ scratch
-└── python-app/
-    ├── app.py                 # HTTP-сервер на FastAPI (порт 8000)
-    ├── test_app.py            # Юнит-тесты Python
-    ├── requirements.txt
-    └── Dockerfile             # Образ python:3.12-alpine
+├── task/
+    ├── compose.yaml               # Оркестрация контейнеров
+    ├── go-app/
+    │   ├── main.go                # HTTP-сервер на Go (порт 8080)
+    │   ├── main_test.go           # Юнит-тесты Go
+    │   ├── go.mod
+    │   └── Dockerfile             # Многоэтапная сборка, финальный образ scratch
+    └── python-app/
+        ├── app.py                 # HTTP-сервер на FastAPI (порт 8000)
+        ├── test_app.py            # Юнит-тесты Python
+        ├── requirements.txt
+        └── Dockerfile             # Образ python:3.12-alpine
 ```
 
 ---
