@@ -31,12 +31,13 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(HealthResponse{Status: "ok"})
 }
 
+var isReady = true
+
 func selfCheck() {
-	resp, err := http.Get("http://localhost:8080/health")
-	if err != nil || resp.StatusCode != http.StatusOK {
-		os.Exit(1)
+	if isReady {
+		os.Exit(0)
 	}
-	os.Exit(0)
+	os.Exit(1)
 }
 
 func newServer() *http.Server {

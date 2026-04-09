@@ -14,7 +14,7 @@ async def check_go():
     go_url = os.getenv("GO_APP_URL", "http://go-app:8080/time")
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.get(go_url)
+            response = await client.get(go_url, timeout=5.0)
             return {"status": "ok", "go_response": response.json()}
         except Exception as e:
             return {"status": "error", "message": str(e)}
@@ -37,6 +37,7 @@ class Server:
 
     def register_signals(self):
         signal.signal(signal.SIGTERM, self._handle_sigterm)
+        signal.signal(signal.SIGINT, self._handle_sigterm)
 
     def _handle_sigterm(self, sig, frame):
         self.server.should_exit = True

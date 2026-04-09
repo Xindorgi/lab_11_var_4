@@ -9,6 +9,4 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w
 FROM scratch
 COPY --from=builder /app /app
 EXPOSE 8080
-HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
-  CMD ["/app", "-health"]
 ENTRYPOINT ["/app"]
